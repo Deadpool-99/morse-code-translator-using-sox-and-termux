@@ -1,0 +1,43 @@
+import subprocess                                                                                  
+import time                                                                                        
+                                                                                                   
+MORSE = {                                                                                          
+    "A": ".-",    "B": "-...",  "C": "-.-.",  "D": "-..",                                          
+    "E": ".",     "F": "..-.",  "G": "--.",   "H": "....",                                         
+    "I": "..",    "J": ".---",  "K": "-.-",   "L": ".-..",                                         
+    "M": "--",    "N": "-.",    "O": "---",   "P": ".--.",                                         
+    "Q": "--.-",  "R": ".-.",   "S": "...",   "T": "-",                                            
+    "U": "..-",   "V": "...-",  "W": ".--",   "X": "-..-",                                         
+    "Y": "-.--",  "Z": "--..",                                                                     
+}                                                                                                  
+                                                                                                   
+frequency = 800                                                                                    
+                                                                                                   
+unit = 0.1                                                                                         
+while True:                                                                                        
+                                                                                                   
+    def tone(duration):                                                                            
+        subprocess.run(["play", "-n","synth", str(duration), "sin", str(frequency) ], check = True)
+                                                                                                   
+    def translation(code):                                                                         
+        for symbol in code :                                                                       
+            if symbol == "." :                                                                     
+                tone(unit)                                                                         
+            elif symbol == "-" :                                                                   
+                tone(3*unit)                                                                       
+                                                                                                   
+            time.sleep(unit)                                                                       
+    def message(text):                                                                             
+        for letter in text:                                                                        
+            if letter == " ":                                                                      
+                time.sleep(7*unit)                                                                 
+            elif letter in MORSE:                                                                  
+                code = MORSE[letter]                                                               
+                print(f"{letter} : {code}")                                                        
+                translation(code)                                                                  
+                time.sleep(2*unit)                                                                 
+    print("type --q to quit")                                                                      
+    text = input("Enter message: ").upper()                                                        
+    if text.lower() == ("--q"):                                                                    
+        break                                                                                      
+    message(text)                                                                                  
